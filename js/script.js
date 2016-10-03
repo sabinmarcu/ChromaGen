@@ -6,6 +6,7 @@
 */
 
 var newColour = [];
+var activeColour = 0;
 var format = 'hex';
 
 function changeColorFormat() {
@@ -27,9 +28,12 @@ function genColor() {
 function changeColour(num) {
     if (num != -1) {
         new_color = newColour[num];
+        activeColour = num;
+        document.getElementById('c' + activeColour).focus()
         //outline();  either use the fn or just write the code here.
     } else {
         new_color = genColor();
+        activeColour = 0;
         newColour.unshift(new_color);
         for (var i = 0; i < 6; i++) {
             var div_id = "c" + (i);
@@ -50,7 +54,7 @@ function formatColor(color) {
 }
 
 function toast(yo) {
-    yo.setAttribute("data-clipboard-text", formatColor(newColour[0]));
+    yo.setAttribute("data-clipboard-text", formatColor(newColour[activeColour]));
     document.getElementById("toast").innerHTML = yo.getAttribute("data-clipboard-text") + " copied to clipboard.";
 }
 
@@ -80,10 +84,19 @@ document.onkeydown = function(e) {
         var color = document.getElementById('clipboard');
         toast(color)
         break;
-        
+
         case 65:
         var color = document.getElementById('copyall');
         copyAll(color)
+        break;
+
+        case 37:
+        changeColour(activeColour - 1);
+        break;
+
+        case 39:
+        if (activeColour < newColour.length - 1)
+            changeColour(activeColour + 1);
         break;
     }
 };
